@@ -23,6 +23,7 @@ def get_train_config() -> ml_collections.ConfigDict:
     configs.NUM_SAMPLES = 32
     configs.EPOCHS = 30
     configs.SAVE_FREQ = 5
+    configs.MODEL_NAME = "my_nerf"
 
     return configs
 

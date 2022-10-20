@@ -225,7 +225,8 @@ class NeRF(keras.Model):
 
         # Get the predictions from the model.
         rgb, _ = render_rgb_depth(
-            model=self.nerf_model, rays_flat=rays_flat, t_vals=t_vals, rand=True
+            model=self.nerf_model, rays_flat=rays_flat, t_vals=t_vals, rand=True,
+            BATCH_SIZE=self.BATCH_SIZE, H=self.H, W=self.W, NUM_SAMPLES=self.NUM_SAMPLES
         )
         loss = self.loss_fn(images, rgb)
 
@@ -285,6 +286,10 @@ class TrainMonitor(keras.callbacks.Callback):
             t_vals=test_t_vals,
             rand=True,
             train=False,
+            BATCH_SIZE=self.BATCH_SIZE, 
+            H=self.H, 
+            W=self.W, 
+            NUM_SAMPLES=self.NUM_SAMPLES
         )
 
         # Plot the rgb, depth and the loss plot.

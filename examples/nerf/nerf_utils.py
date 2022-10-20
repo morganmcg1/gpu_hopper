@@ -68,7 +68,8 @@ def get_rays(height, width, focal, pose):
     return (ray_origins, ray_directions)
 
 
-def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=False):
+def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=False,
+POS_ENCODE_DIMS=None):
     """Renders the rays and flattens it.
     Args:
         ray_origins: The origin points for rays.
@@ -95,11 +96,11 @@ def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=F
         ray_directions[..., None, :] * t_vals[..., None]
     )
     rays_flat = tf.reshape(rays, [-1, 3])
-    rays_flat = encode_position(rays_flat)
+    rays_flat = encode_position(rays_flat, POS_ENCODE_DIMS=POS_ENCODE_DIMS)
     return (rays_flat, t_vals)
 
 
-def map_fn(pose, H=None, W=None, focal=None, NUM_SAMPLES=None):
+def map_fn(pose, H=None, W=None, focal=None, NUM_SAMPLES=None, POS_ENCODE_DIMS=None):
     """Maps individual pose to flattened rays and sample points.
     Args:
         pose: The pose matrix of the camera.
@@ -115,6 +116,7 @@ def map_fn(pose, H=None, W=None, focal=None, NUM_SAMPLES=None):
         far=6.0,
         num_samples=NUM_SAMPLES,
         rand=True,
+        POS_ENCODE_DIMS=POS_ENCODE_DIMS,
     )
     return (rays_flat, t_vals)
 

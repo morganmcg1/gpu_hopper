@@ -94,8 +94,6 @@ def main(
     test_imgs, test_rays = next(iter(train_ds))
     test_rays_flat, test_t_vals = test_rays
 
-    loss_list = []
-
     num_pos = H * W * NUM_SAMPLES
     nerf_model = get_nerf_model(num_layers=8, num_pos=num_pos, POS_ENCODE_DIMS=POS_ENCODE_DIMS)
 
@@ -113,7 +111,8 @@ def main(
         validation_data=val_ds,
         batch_size=BATCH_SIZE,
         epochs=EPOCHS,
-        callbacks=[TrainMonitor(), 
+        callbacks=[
+                    # TrainMonitor(), 
                    WandbMetricsLogger(log_freq="batch"),
                    WandbModelCheckpoint(filepath=MODEL_NAME, save_freq=SAVE_FREQ)],
         steps_per_epoch=split_index // BATCH_SIZE,

@@ -21,14 +21,12 @@ def main(
     print("\nStarting Hopper watch...\n")
 
     while True:
-    # for i in range(10):
         s_count = 0
-        i = 0
         api = wandb.Api()
         run = api.from_path(f"{entity}/{project}/runs/{wandb_run_id}")
         if run.state == "running":
             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            print(f"{i} {dt_string} : Run {wandb_run_id} is still running")
+            print(f"{dt_string} : Run {wandb_run_id} is still running")
             time.sleep(60)
         elif run.state in ["failed", "killed", "crashed"] and s_count < len(services):
             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")

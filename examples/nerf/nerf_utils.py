@@ -99,7 +99,7 @@ def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=F
     return (rays_flat, t_vals)
 
 
-def map_fn(pose):
+def map_fn(pose, H=None, W=None, focal=None, NUM_SAMPLES=None):
     """Maps individual pose to flattened rays and sample points.
     Args:
         pose: The pose matrix of the camera.
@@ -249,7 +249,7 @@ class NeRF(keras.Model):
         self.nerf_model.save_weights(filepath, *args, **kwargs)
     # END ADDED
 
-def get_nerf_model(num_layers, num_pos):
+def get_nerf_model(num_layers, num_pos, POS_ENCODE_DIMS):
     """Generates the NeRF neural network.
     Args:
         num_layers: The number of MLP layers.

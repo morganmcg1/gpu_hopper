@@ -71,7 +71,7 @@ def main(
     # Make the training pipeline.
     train_img_ds = tf.data.Dataset.from_tensor_slices(train_images)
     train_pose_ds = tf.data.Dataset.from_tensor_slices(train_poses)
-    fn = partial(map_fn, H=H, W=2, focal=focal, NUM_SAMPLES=NUM_SAMPLES)
+    fn = partial(map_fn, H=H, W=2, focal=focal, NUM_SAMPLES=NUM_SAMPLES, POS_ENCODE_DIMS=POS_ENCODE_DIMS)
     train_ray_ds = train_pose_ds.map(fn,  num_parallel_calls=AUTO)
     training_ds = tf.data.Dataset.zip((train_img_ds, train_ray_ds))
     train_ds = (

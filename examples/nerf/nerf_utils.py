@@ -276,12 +276,15 @@ def get_nerf_model(num_layers, num_pos, POS_ENCODE_DIMS):
     outputs = layers.Dense(units=4)(x)
     return keras.Model(inputs=inputs, outputs=outputs)
 
-loss_list = []
+
 
 class TrainMonitor(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
+        print(f"epoch is {epoch}")
+        if epoch == 0:
+            self.loss_list = []
         loss = logs["loss"]
-        loss_list.append(loss)
+        self.loss_list.append(loss)
         test_recons_images, depth_maps = render_rgb_depth(
             model=self.model.nerf_model,
             rays_flat=test_rays_flat,
@@ -302,7 +305,7 @@ class TrainMonitor(keras.callbacks.Callback):
         ax[1].imshow(keras.preprocessing.image.array_to_img(depth_maps[0, ..., None]))
         ax[1].set_title(f"Depth Map: {epoch:03d}")
 
-        ax[2].plot(loss_list)
+        ax[2].plot(self.loss_list)
         ax[2].set_xticks(np.arange(0, EPOCHS + 1, 5.0))
         ax[2].set_title(f"Loss Plot: {epoch:03d}")
 

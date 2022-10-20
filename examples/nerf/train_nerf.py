@@ -6,10 +6,12 @@ tf.random.set_seed(42)
 import os
 import glob
 import imageio
+
 import numpy as np
 from tqdm import tqdm
 from tensorflow import keras
 from tensorflow.keras import layers
+from functools import partial
 import matplotlib.pyplot as plt
 
 import wandb
@@ -69,7 +71,8 @@ def main(
     # Make the training pipeline.
     train_img_ds = tf.data.Dataset.from_tensor_slices(train_images)
     train_pose_ds = tf.data.Dataset.from_tensor_slices(train_poses)
-    train_ray_ds = train_pose_ds.map(map_fn, num_parallel_calls=AUTO)
+    fn = partial(map_fn, H=H, W=2, focal=focal, NUM_SAMPLES=NUM_SAMPLES)
+    train_ray_ds = train_pose_ds.map(fn,  num_parallel_calls=AUTO)
     training_ds = tf.data.Dataset.zip((train_img_ds, train_ray_ds))
     train_ds = (
         training_ds.shuffle(BATCH_SIZE)
@@ -80,7 +83,7 @@ def main(
     # Make the validation pipeline.
     val_img_ds = tf.data.Dataset.from_tensor_slices(val_images)
     val_pose_ds = tf.data.Dataset.from_tensor_slices(val_poses)
-    val_ray_ds = val_pose_ds.map(map_fn, num_parallel_calls=AUTO)
+    val_ray_ds = val_pose_ds.map(fn, num_parallel_calls=AUTO)
     validation_ds = tf.data.Dataset.zip((val_img_ds, val_ray_ds))
     val_ds = (
         validation_ds.shuffle(BATCH_SIZE)
@@ -94,7 +97,7 @@ def main(
     loss_list = []
 
     num_pos = H * W * NUM_SAMPLES
-    nerf_model = get_nerf_model(num_layers=8, num_pos=num_pos)
+    nerf_model = get_nerf_model(num_layers=8, num_pos=num_pos, POS_ENCODE_DIMS=POS_ENCODE_DIMS)
 
     model = NeRF(nerf_model)
     model.compile(

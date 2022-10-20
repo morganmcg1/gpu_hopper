@@ -38,7 +38,7 @@ def main(
     NUM_SAMPLES = wandb.config.NUM_SAMPLES
     EPOCHS = wandb.config.EPOCHS
     POS_ENCODE_DIMS = wandb.config.POS_ENCODE_DIMS
-    SAVE_FREQ = wandb.config.save_freq
+    SAVE_FREQ = wandb.config.SAVE_FREQ
 
     # Download the data if it does not already exist.
     file_name = "tiny_nerf_data.npz"

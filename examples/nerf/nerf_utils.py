@@ -120,7 +120,8 @@ def map_fn(pose, H=None, W=None, focal=None, NUM_SAMPLES=None, POS_ENCODE_DIMS=N
     )
     return (rays_flat, t_vals)
 
-def render_rgb_depth(model, rays_flat, t_vals, rand=True, train=True):
+def render_rgb_depth(model, rays_flat, t_vals, rand=True, train=True,
+BATCH_SIZE=None, H=None, W=None, NUM_SAMPLES=None):
     """Generates the RGB image and depth map from model prediction.
     Args:
         model: The MLP model that is trained to predict the rgb and
@@ -172,9 +173,13 @@ def render_rgb_depth(model, rays_flat, t_vals, rand=True, train=True):
     return (rgb, depth_map)
 
 class NeRF(keras.Model):
-    def __init__(self, nerf_model):
+    def __init__(self, nerf_model, BATCH_SIZE=None, H=None, W=None, NUM_SAMPLES=None):
         super().__init__()
         self.nerf_model = nerf_model
+        self.BATCH_SIZE = BATCH_SIZE
+        self.H = H
+        self.W = W
+        self.NUM_SAMPLES = NUM_SAMPLES
 
     def compile(self, optimizer, loss_fn):
         super().compile()
@@ -191,7 +196,8 @@ class NeRF(keras.Model):
         with tf.GradientTape() as tape:
             # Get the predictions from the model.
             rgb, _ = render_rgb_depth(
-                model=self.nerf_model, rays_flat=rays_flat, t_vals=t_vals, rand=True
+                model=self.nerf_model, rays_flat=rays_flat, t_vals=t_vals, rand=True,
+                BATCH_SIZE=self.BATCH_SIZE, H=self.H, W=self.W, NUM_SAMPLES=self.NUM_SAMPLES
             )
             loss = self.loss_fn(images, rgb)
 

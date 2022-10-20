@@ -99,7 +99,7 @@ def main(
     num_pos = H * W * NUM_SAMPLES
     nerf_model = get_nerf_model(num_layers=8, num_pos=num_pos, POS_ENCODE_DIMS=POS_ENCODE_DIMS)
 
-    model = NeRF(nerf_model)
+    model = NeRF(nerf_model, BATCH_SIZE=BATCH_SIZE, H=H, W=W, NUM_SAMPLES=NUM_SAMPLES)
     model.compile(
         optimizer=keras.optimizers.Adam(), loss_fn=keras.losses.MeanSquaredError()
     )

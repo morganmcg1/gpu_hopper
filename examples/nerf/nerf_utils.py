@@ -14,7 +14,7 @@ from tensorflow.keras import layers
 import matplotlib.pyplot as plt
 
 
-def encode_position(x):
+def encode_position(x, POS_ENCODE_DIMS=POS_ENCODE_DIMS):
     """Encodes the position into its corresponding Fourier feature.
     Args:
         x: The input coordinate.

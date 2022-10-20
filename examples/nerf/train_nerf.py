@@ -93,7 +93,6 @@ def main(
 
     loss_list = []
 
-
     num_pos = H * W * NUM_SAMPLES
     nerf_model = get_nerf_model(num_layers=8, num_pos=num_pos)
 

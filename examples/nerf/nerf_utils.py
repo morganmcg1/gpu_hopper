@@ -276,6 +276,8 @@ def get_nerf_model(num_layers, num_pos, POS_ENCODE_DIMS):
     outputs = layers.Dense(units=4)(x)
     return keras.Model(inputs=inputs, outputs=outputs)
 
+loss_list = []
+
 class TrainMonitor(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         loss = logs["loss"]

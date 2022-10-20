@@ -2,6 +2,13 @@ import random
 import ml_collections
 
 
+def get_hopper_config() -> ml_collections.ConfigDict:
+    configs = ml_collections.ConfigDict()
+    configs.hopper_services = ["kaggle"]
+    
+    return configs
+
+
 def get_wandb_config() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.entity = "morgan"
@@ -33,5 +40,6 @@ def get_config() -> ml_collections.ConfigDict:
     configs.wandb = get_wandb_config()
     configs.model = get_model_config()
     configs.train = get_train_config()
+    configs.hopper = get_hopper_config()
     
     return configs

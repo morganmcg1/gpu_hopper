@@ -2,9 +2,11 @@ import random
 import ml_collections
 
 
+
 def get_hopper_config() -> ml_collections.ConfigDict:
     configs = ml_collections.ConfigDict()
     configs.hopper_services = ["kaggle"]
+    configs.kaggle_kernel_path = "examples/nerf"
     
     return configs
 
